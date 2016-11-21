@@ -1,0 +1,128 @@
+# Leetcode-
+
+
+
+
+public class LRUCache {
+    
+    private class Node{
+    
+        public Node next;
+        public Node previous;
+        public int key;
+        public int value;
+        
+        public Node(int key,int value){
+            this.key = key;
+            this.value = value;
+        }
+        public Node(){
+            
+        }
+        public void addNext(Node node){
+            
+            Node a = this.next;
+            
+            this.next = node;
+            node.previous = this;
+            
+            node.next = a;
+            a.previous = node;
+        }
+        
+        public void remove(){
+            Node a = this.next;
+            Node b = this.previous;
+           
+            a.previous = b;
+            b.next = a;
+        }
+        
+        public int getKey(){
+            return key;
+        }
+        
+        public int getValue(){
+            return value;
+        }
+    
+    }
+    
+    private Map<Integer,Node> map;
+    private Node head,tail;
+    private int maxSize,size;
+    
+    public LRUCache(int capacity) {
+        maxSize = capacity;
+        size = 0;
+        
+        map = new HashMap<Integer,Node>();
+        head = new Node(-1,0);
+        tail = new Node(-1,0);
+        head.next = tail;
+        tail.previous = head;
+    }
+    
+    public int get(int key) {
+        //System.out.println("input get:"+key);
+        if(map.containsKey(key)){
+            Node node = map.get(key);
+            int value = node.getValue();
+            
+            //add the node into the linkliest
+            node.remove();
+            head.addNext(node);
+      
+            return value; 
+        }
+        else
+            return -1;
+    }
+    
+    public void set(int key, int value) {
+        //System.out.println("input set:"+key+","+value);
+        if(!map.containsKey(key)){
+            if(size == maxSize){
+                
+                Node del = tail.previous;
+                del.remove();
+                Node node = new Node(key,value);
+                head.addNext(node);
+                
+                // update map
+                map.put(key,node);
+                map.remove(del.key);
+            }
+            else{
+                // update queue
+                Node node = new Node(key,value);
+                head.addNext(node);
+                //update map
+                map.put(key,node);
+                
+                size ++;
+            }
+        }
+        else{
+            // cache contain key
+            Node node = map.get(key);
+            node.value = value;
+            
+            //update queue
+            node.remove();
+            head.addNext(node);
+            
+            //update queue
+            map.put(key,node);
+        }
+    }
+    
+    public void print(){
+        Node node = head;
+        while(node.next != tail){
+            System.out.print(node.value+",");
+            node = node.next;
+        }
+        System.out.println();
+    }
+}
