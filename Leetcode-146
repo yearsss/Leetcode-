@@ -37,15 +37,7 @@ public class LRUCache {
             a.previous = b;
             b.next = a;
         }
-        
-        public int getKey(){
-            return key;
-        }
-        
-        public int getValue(){
-            return value;
-        }
-    
+           
     }
     
     private Map<Integer,Node> map;
