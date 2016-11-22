@@ -1,0 +1,57 @@
+public class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        
+        int num = 0,len = 0,h = 0;
+        String[] a = new String[words.length];
+        List<String> ret = new ArrayList<String>();
+        while(h < words.length){
+    
+            if(0 == num || (len+words[h].length()+1) <= maxWidth){
+                a[num] = words[h];
+                len += words[h].length()+(num==0?0:1);
+                num += 1;
+                h ++;
+            }
+            else{
+                String tmp = "";
+                if(num == 1){
+               
+                    tmp += a[0];
+                    for(int i=0;i<maxWidth-len;i++){
+                        tmp += ' ';
+                    }
+                }
+                else{
+                    int spaces = maxWidth - len + num - 1;
+                    for(int i=0;i<num;i++){
+                        
+                        tmp += a[i];
+                        if(i != num-1){
+                            int space = spaces%(num-i-1)==0 ? spaces/(num-i-1):(spaces/(num-i-1)+1);
+                            for(int j=0;j<space;j++)
+                                tmp += ' ';
+                            spaces -= space;
+                        }
+                    }
+                }
+                num = 0;
+                len = 0;
+                ret.add(tmp);
+            }
+        }
+        //the last line
+        String tmp = "";
+        for(int i=0;i<num;i++){
+            if(i == num-1)
+                tmp += a[i];
+            else
+                tmp += a[i] + ' ';
+            
+        }
+        for(int i=0;i<maxWidth-len;i++)
+            tmp += ' ';
+        ret.add(tmp);
+        
+        return ret;
+    }
+}
