@@ -1,0 +1,59 @@
+public class Solution {
+    
+    private String num2words(int num){
+        int a = num / 100;
+        int b = (num - a * 100) / 10;
+        int c = num - a * 100;
+        int d = num % 10;
+        String[] words1 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven",
+            "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"};
+        String[] words2 = {"", "","Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        
+        String str = "";
+        if(a != 0)
+            str += words1[a] + " Hundred";
+        
+        if(c < 21 && c > 0)
+            return str + (a == 0 ? words1[c] : " " + words1[c]);
+            
+        else if(c >= 21)
+            str += (a == 0 ? words2[c/10] : " " + words2[c/10]);
+        else
+            return str;
+        if(d != 0)
+            str += " " + words1[d];
+        
+        return str ;
+    }
+    
+    public String numberToWords(int num) {
+        if(num == 0)
+            return "Zero";
+        int a = num / 1000000000;
+        num = num - a * 1000000000;
+        int b = num / 1000000;
+        num = num - b * 1000000;
+        int c = num / 1000;
+        num = num - c * 1000;
+
+        String str = "";
+        if(a != 0)
+            str += num2words(a) + " Billion";
+        if(a != 0 && b != 0)
+            str += " " + num2words(b) + " Million";
+        else if(b != 0)
+            str += num2words(b) + " Million";
+            
+        if((a != 0 || b != 0) && c != 0)
+            str += " " + num2words(c) + " Thousand";
+        else if(c != 0)
+            str += num2words(c) + " Thousand";
+            
+        if((a != 0 || b != 0 || c != 0) && num != 0)
+            str += " " + num2words(num);
+        else
+            str += num2words(num);
+            
+        return str;
+    }
+}
