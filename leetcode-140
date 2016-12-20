@@ -1,0 +1,40 @@
+public class Solution {
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        List<Integer>[] m = new List[s.length()+1];
+        for(int i=0;i<=s.length();i++) m[i] = new LinkedList<Integer>();
+        m[0].add(-1);
+        for(int i=1;i<=s.length();i++){
+            for(int j=0;j<i;j++){
+                if(wordDict.contains(s.substring(j,i)) && !m[j].isEmpty())
+                    m[i].add(j);
+            }
+        }
+        List<String> ret = new LinkedList<String>();
+        Stack<Integer> stack = new Stack<Integer>();
+        getStr(s,m,s.length(),ret,stack);
+        return ret;
+    }
+
+    private void getStr(String s,List<Integer>[] m, int n, List<String> ret, Stack<Integer> tmp){
+        if(n == 0){
+            int pre = 0;
+            String str = "";
+            for (int i = tmp.size() - 1; ; i--){
+                if(i == 0){
+                    str += s.substring(pre, tmp.elementAt(i));
+                    break;
+                }
+                else
+                    str += s.substring(pre, tmp.elementAt(i)) + " ";
+                pre = tmp.elementAt(i);
+            }
+            ret.add(str);
+        }
+        else{
+            tmp.push(n);
+            for(int i : m[n])
+                getStr(s,m,i,ret,tmp);
+            tmp.pop();
+        }
+    }
+}
