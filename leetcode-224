@@ -1,0 +1,53 @@
+public class Solution {
+
+    public int maxPathSum(TreeNode root){
+        if(null == root)
+            return 0;
+
+        int maxSum = Integer.MIN_VALUE;
+        Map<TreeNode, Integer> map = new HashMap<TreeNode, Integer>();
+        maxDownPath(root, map);
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            int v = maxPath(node, map);
+            // System.out.println("node: " + node.val + "value: " + v);
+            if(v > maxSum)
+                maxSum = v;
+            if(null != node.left)
+                queue.add(node.left);
+            if(null != node.right)
+                queue.add(node.right);
+        }
+
+        return maxSum;
+    }
+
+    public int maxPath(TreeNode root, Map<TreeNode, Integer> map){
+        int leftPath = map.get(root.left);
+        int rightPath = map.get(root.right);
+        int ret = root.val;
+        if(leftPath > 0)
+            ret += leftPath;
+        if(rightPath > 0)
+            ret += rightPath;
+
+        return ret;
+    }
+
+    public int maxDownPath(TreeNode node, Map<TreeNode, Integer> map){
+        if(null == node)
+            return 0;
+        if(map.containsKey(node))
+            return map.get(node);
+        else{
+            int maxPathLeft = maxDownPath(node.left, map);
+            map.put(node.left, maxPathLeft);
+            int maxPathRight = maxDownPath(node.right, map);
+            map.put(node.right, maxPathRight);
+            return Math.max(maxPathLeft, maxPathRight) > 0 ?
+                    Math.max(maxPathLeft, maxPathRight) + node.val : node.val;
+        }
+    }
+}
