@@ -1,0 +1,39 @@
+/** test case
+ * target: abacaabacabacabacabb
+ * pattern: abacab
+ */
+
+public class Solution {
+    public void find(String target, String pattern){
+        int[] next = calNext(pattern);
+        System.out.println(Arrays.toString(next));
+        int i = 0, j = 0;
+        while(i < target.length()){
+            // System.out.println("target: " + target.charAt(i) + ", pattern: " + pattern.charAt(j));
+            if(target.charAt(i) == pattern.charAt(j))
+                j++;
+            else
+                j = next[j];
+            i++;
+            if(j == pattern.length()) {
+                int offset = i - pattern.length();
+                System.out.println(offset);
+                i = offset + 1;
+                j = 0;
+            }
+        }
+    }
+
+    private int[] calNext(String pattern){
+        int[] next = new int[pattern.length() + 1];
+        next[1] = 0;
+        for(int i = 1; i < pattern.length(); i++){
+            if(pattern.charAt(i) == pattern.charAt(next[i]))
+                next[i + 1] = next[i] + 1;
+            else
+                next[i + 1] = 0;
+        }
+        return next;
+    }
+}
+
