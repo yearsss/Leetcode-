@@ -1,0 +1,64 @@
+public class MedianFinder {
+
+    public class BTNode{
+        BTNode left;
+        BTNode right;
+        int val;
+        int leftChNum;
+        public BTNode(int val){
+            this.val = val;
+            this.left = null;
+            this.right = null;
+            this.leftChNum = 0;
+        }
+    }
+
+    private BTNode root;
+    private int size;
+
+    // Adds a number into the data structure.
+    public void addNum(int num) {
+        size ++;
+        if(null == root)
+            root = new BTNode(num);
+        else{
+            BTNode pre = null, cur = root;
+            while(null != cur){
+                pre = cur;
+                if(cur.val > num) {
+                    cur.leftChNum ++;
+                    cur = cur.left;
+                }
+                else
+                    cur = cur.right;
+            }
+            if(pre.val > num)
+                pre.left = new BTNode(num);
+            else
+                pre.right = new BTNode(num);
+        }
+    }
+
+    // Returns the median of current data stream
+    public double findMedian() {
+
+       if(1 == size % 2)
+           return find(size / 2, root);
+        else
+            return (find(size / 2, root) + find(size / 2 - 1, root)) / 2;
+    }
+
+    private double find(int left, BTNode root){
+        // System.out.println(left);
+        if(left == root.leftChNum)
+            return root.val;
+        else if(left < root.leftChNum)
+            return find(left, root.left);
+        else{
+            left -= root.leftChNum + 1;
+            // System.out.println("left: " + left);
+            // System.out.println("root.leftChNum: " + root.leftChNum);
+            return find(left, root.right);
+        }
+    }
+}
